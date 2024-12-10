@@ -18,10 +18,9 @@ plik_excel = "dane.xlsx"
 
 try:
     df = pd.read_excel(plik_excel, sheet_name="Sheet1")
+    logging.debug("New session opened")
 except FileNotFoundError:
-    df = pd.DataFrame(columns=["Name", "Quantity", "Unit", "Unit Price ($)"])
-    df.to_excel(plik_excel, index=False)
-    print("Plik nie znaleziony. Utworzono nowy plik.")
+    logging.debug("Excel database not found, please provide one to projects folder")
 
 revenue = df.at[0, "Revenue"]
 cost = df.at[0, "Cost"]
@@ -529,3 +528,4 @@ odswiez_tabele()
 
 window.mainloop()
 
+logging.debug("Session closed")
