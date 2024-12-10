@@ -12,7 +12,6 @@ from tkinter import messagebox
 import logging
 logging.basicConfig(level = logging.DEBUG, format = '%(asctime)s %(message)s', filename="logfile.log")
 
-
 plik_excel = "dane.xlsx"
 #plik_excel = r"C:\Users\Tomasz\Kurs Kodilla\dane.xlsx"
 
@@ -60,7 +59,6 @@ def add_item():
 
         df.at[0, "Cost"] = cost 
         df.at[0, "Revenue"] = revenue
-
         canvas.itemconfig(tagOrId=cost_text, text=f"${cost}")
         canvas.itemconfig(tagOrId=revenue_text, text=f"${revenue}")
 
@@ -69,11 +67,10 @@ def add_item():
         entry_6.delete(0, "end")
         entry_7.delete(0, "end")
         messagebox.showinfo("Success", f"Add {quantity} of {name} for {quantity * price}.")
+        logging.debug(f"Name: {name}, Quantity: {quantity}, Unit: {unit}, Price: {price}, Added {quantity * price} $ to cost")
         
-    logging.debug(f"Name: {name}, Quantity: {quantity}, Unit: {unit}, Price: {price}, Added {quantity * price} $ to cost")
     odswiez_tabele()
     df.to_excel(plik_excel, index=False)
-
 
 def sell_item():
     #this is a func tht sells item if they are present in database
@@ -102,8 +99,6 @@ def sell_item():
 
             if df.at[index, "Quantity"] == 0:
                 df.drop(index, inplace=True) 
-
-            df.to_excel(plik_excel, index=False)
             
             df.at[0, "Income"] = income
             df.at[0, "Revenue"] = revenue
@@ -114,32 +109,27 @@ def sell_item():
             entry_4.delete(0, "end")
             entry_5.delete(0, "end")
             messagebox.showinfo("Success", f"Sold {quantity} of {name} for {quantity * selling_price}.")
+            logging.debug(f"Name: {name}, Quantity: {quantity}, Selling price: {selling_price}, Added {quantity * selling_price} $ to income")
             
         else:
             messagebox.showwarning("Insufficient quantity", f"Not enough {name} in stock.\nAvailable: {actual_quantity}.")
     else:
         messagebox.showerror("Item not found", f"{name} is not in the stock.")
 
-    logging.debug(f"Name: {name}, Quantity: {quantity}, Selling price: {selling_price}, Added {quantity * selling_price} $ to income")
     odswiez_tabele()
     df.to_excel(plik_excel, index=False)
-
-    
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets/frame0")
 
-
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
-
 
 window = Tk()
 window.title("Python warehouse")
 
 window.geometry("1280x720")
 window.configure(bg = "#FFFFFF")
-
 
 canvas = Canvas(
     window,
